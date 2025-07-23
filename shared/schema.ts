@@ -57,6 +57,48 @@ export const userCalculations = pgTable("user_calculations", {
   timestamp: timestamp("timestamp").defaultNow().notNull(),
 });
 
+// Novas tabelas para base de conhecimento da IA
+export const aiProducts = pgTable("ai_products", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  category: text("category").notNull(),
+  description: text("description"),
+  dosageInfo: text("dosage_info"),
+  contraindications: text("contraindications"),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const aiProtocols = pgTable("ai_protocols", {
+  id: serial("id").primaryKey(),
+  title: text("title").notNull(),
+  category: text("category").notNull(), // 'bulking', 'cutting', 'strength', etc.
+  targetGoal: text("target_goal").notNull(),
+  targetGender: text("target_gender"), // 'male', 'female', 'both'
+  minExperience: integer("min_experience").default(0),
+  maxExperience: integer("max_experience"),
+  protocolSteps: jsonb("protocol_steps").notNull(), // Array of steps
+  duration: text("duration"),
+  warnings: text("warnings"),
+  pctRequired: boolean("pct_required").default(false),
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export const aiKnowledgeBase = pgTable("ai_knowledge_base", {
+  id: serial("id").primaryKey(),
+  category: text("category").notNull(), // 'general_guidelines', 'safety_info', 'interaction_warnings'
+  title: text("title").notNull(),
+  content: text("content").notNull(),
+  tags: text("tags").array(), // For easier searching
+  priority: integer("priority").default(1), // 1=low, 5=high priority
+  isActive: boolean("is_active").default(true),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
 export const insertUserSchema = createInsertSchema(users).omit({
   id: true,
   createdAt: true,
@@ -90,6 +132,24 @@ export const insertUserCalculationSchema = createInsertSchema(userCalculations).
   timestamp: true,
 });
 
+export const insertAiProductSchema = createInsertSchema(aiProducts).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertAiProtocolSchema = createInsertSchema(aiProtocols).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
+export const insertAiKnowledgeBaseSchema = createInsertSchema(aiKnowledgeBase).omit({
+  id: true,
+  createdAt: true,
+  updatedAt: true,
+});
+
 export type InsertUser = z.infer<typeof insertUserSchema>;
 export type User = typeof users.$inferSelect;
 export type InsertConversation = z.infer<typeof insertConversationSchema>;
@@ -102,3 +162,9 @@ export type InsertApiUsage = z.infer<typeof insertApiUsageSchema>;
 export type ApiUsage = typeof apiUsage.$inferSelect;
 export type InsertUserCalculation = z.infer<typeof insertUserCalculationSchema>;
 export type UserCalculation = typeof userCalculations.$inferSelect;
+export type InsertAiProduct = z.infer<typeof insertAiProductSchema>;
+export type AiProduct = typeof aiProducts.$inferSelect;
+export type InsertAiProtocol = z.infer<typeof insertAiProtocolSchema>;
+export type AiProtocol = typeof aiProtocols.$inferSelect;
+export type InsertAiKnowledgeBase = z.infer<typeof insertAiKnowledgeBaseSchema>;
+export type AiKnowledgeBase = typeof aiKnowledgeBase.$inferSelect;

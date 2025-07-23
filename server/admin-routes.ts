@@ -1,6 +1,14 @@
 import type { Express } from "express";
 import { storage } from "./storage";
-import { insertAdminSchema, insertSystemSettingSchema, insertUserCalculationSchema } from "@shared/schema";
+import { 
+  insertAdminSchema, 
+  insertSystemSettingSchema, 
+  insertUserCalculationSchema,
+  insertAiProductSchema,
+  insertAiProtocolSchema,
+  insertAiKnowledgeBaseSchema
+} from "@shared/schema";
+import { ConfigManager } from "./services/config-manager";
 import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { promisify } from "util";
 import rateLimit from "express-rate-limit";
@@ -427,6 +435,140 @@ export function registerAdminRoutes(app: Express) {
     try {
       const calculations = await storage.getUserCalculations(req.params.sessionId);
       res.json(calculations);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // AI Knowledge Base Management Routes
+
+  // Products management
+  app.get("/api/admin/products", requireAdmin, async (req, res) => {
+    try {
+      const products = await storage.getAllProducts();
+      res.json(products);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/admin/products", requireAdmin, async (req, res) => {
+    try {
+      const productData = insertAiProductSchema.parse(req.body);
+      const product = await storage.createProduct(productData);
+      await ConfigManager.invalidateKnowledgeCache();
+      res.json(product);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
+  });
+
+  app.put("/api/admin/products/:id", requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const productData = insertAiProductSchema.partial().parse(req.body);
+      const product = await storage.updateProduct(id, productData);
+      await ConfigManager.invalidateKnowledgeCache();
+      res.json(product);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
+  });
+
+  app.delete("/api/admin/products/:id", requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteProduct(id);
+      await ConfigManager.invalidateKnowledgeCache();
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Protocols management
+  app.get("/api/admin/protocols", requireAdmin, async (req, res) => {
+    try {
+      const protocols = await storage.getAllProtocols();
+      res.json(protocols);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/admin/protocols", requireAdmin, async (req, res) => {
+    try {
+      const protocolData = insertAiProtocolSchema.parse(req.body);
+      const protocol = await storage.createProtocol(protocolData);
+      await ConfigManager.invalidateKnowledgeCache();
+      res.json(protocol);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
+  });
+
+  app.put("/api/admin/protocols/:id", requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const protocolData = insertAiProtocolSchema.partial().parse(req.body);
+      const protocol = await storage.updateProtocol(id, protocolData);
+      await ConfigManager.invalidateKnowledgeCache();
+      res.json(protocol);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
+  });
+
+  app.delete("/api/admin/protocols/:id", requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteProtocol(id);
+      await ConfigManager.invalidateKnowledgeCache();
+      res.json({ success: true });
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  // Knowledge base management
+  app.get("/api/admin/knowledge", requireAdmin, async (req, res) => {
+    try {
+      const knowledge = await storage.getAllKnowledgeBase();
+      res.json(knowledge);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
+    }
+  });
+
+  app.post("/api/admin/knowledge", requireAdmin, async (req, res) => {
+    try {
+      const knowledgeData = insertAiKnowledgeBaseSchema.parse(req.body);
+      const knowledge = await storage.createKnowledge(knowledgeData);
+      await ConfigManager.invalidateKnowledgeCache();
+      res.json(knowledge);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
+  });
+
+  app.put("/api/admin/knowledge/:id", requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      const knowledgeData = insertAiKnowledgeBaseSchema.partial().parse(req.body);
+      const knowledge = await storage.updateKnowledge(id, knowledgeData);
+      await ConfigManager.invalidateKnowledgeCache();
+      res.json(knowledge);
+    } catch (error: any) {
+      res.status(400).json({ error: error.message });
+    }
+  });
+
+  app.delete("/api/admin/knowledge/:id", requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id);
+      await storage.deleteKnowledge(id);
+      await ConfigManager.invalidateKnowledgeCache();
+      res.json({ success: true });
     } catch (error: any) {
       res.status(500).json({ error: error.message });
     }

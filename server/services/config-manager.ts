@@ -1,9 +1,17 @@
 import { storage } from "../storage";
+import type { AiProduct, AiProtocol, AiKnowledgeBase } from "@shared/schema";
 
 export class ConfigManager {
   private static cache: Map<string, string> = new Map();
   private static lastFetch: number = 0;
   private static CACHE_TTL = 60000; // 1 minute cache
+  
+  // Cache for knowledge base data
+  private static productsCache: AiProduct[] = [];
+  private static protocolsCache: AiProtocol[] = [];
+  private static knowledgeCache: AiKnowledgeBase[] = [];
+  private static lastKnowledgeFetch: number = 0;
+  private static KNOWLEDGE_CACHE_TTL = 300000; // 5 minutes cache for knowledge base
 
   static async get(key: string, defaultValue: string = ""): Promise<string> {
     // Check cache first
@@ -106,5 +114,59 @@ Mantenha respostas concisas, científicas e sempre em português brasileiro.`,
     }
 
     await this.refreshCache();
+  }
+
+  // Knowledge base methods
+  static async getActiveProducts(): Promise<AiProduct[]> {
+    const now = Date.now();
+    if (now - this.lastKnowledgeFetch > this.KNOWLEDGE_CACHE_TTL) {
+      await this.refreshKnowledgeCache();
+    }
+    return this.productsCache;
+  }
+
+  static async getActiveProtocols(): Promise<AiProtocol[]> {
+    const now = Date.now();
+    if (now - this.lastKnowledgeFetch > this.KNOWLEDGE_CACHE_TTL) {
+      await this.refreshKnowledgeCache();
+    }
+    return this.protocolsCache;
+  }
+
+  static async getProtocolsByProfile(goal: string, gender?: string, experience?: number): Promise<AiProtocol[]> {
+    return await storage.getProtocolsByProfile(goal, gender, experience);
+  }
+
+  static async getActiveKnowledgeBase(): Promise<AiKnowledgeBase[]> {
+    const now = Date.now();
+    if (now - this.lastKnowledgeFetch > this.KNOWLEDGE_CACHE_TTL) {
+      await this.refreshKnowledgeCache();
+    }
+    return this.knowledgeCache;
+  }
+
+  static async getKnowledgeByCategory(category: string): Promise<AiKnowledgeBase[]> {
+    return await storage.getKnowledgeByCategory(category);
+  }
+
+  private static async refreshKnowledgeCache(): Promise<void> {
+    try {
+      const [products, protocols, knowledge] = await Promise.all([
+        storage.getActiveProducts(),
+        storage.getActiveProtocols(),
+        storage.getActiveKnowledgeBase()
+      ]);
+      
+      this.productsCache = products;
+      this.protocolsCache = protocols;
+      this.knowledgeCache = knowledge;
+      this.lastKnowledgeFetch = Date.now();
+    } catch (error) {
+      console.error("Erro ao atualizar cache da base de conhecimento:", error);
+    }
+  }
+
+  static async invalidateKnowledgeCache(): Promise<void> {
+    this.lastKnowledgeFetch = 0;
   }
 }

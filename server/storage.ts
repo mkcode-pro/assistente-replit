@@ -5,6 +5,9 @@ import {
   systemSettings,
   apiUsage,
   userCalculations,
+  aiProducts,
+  aiProtocols,
+  aiKnowledgeBase,
   type User, 
   type InsertUser, 
   type Conversation, 
@@ -16,7 +19,13 @@ import {
   type ApiUsage,
   type InsertApiUsage,
   type UserCalculation,
-  type InsertUserCalculation
+  type InsertUserCalculation,
+  type AiProduct,
+  type InsertAiProduct,
+  type AiProtocol,
+  type InsertAiProtocol,
+  type AiKnowledgeBase,
+  type InsertAiKnowledgeBase
 } from "@shared/schema";
 import { db } from "./db";
 import { eq, desc, count, sql, and, gte, lte } from "drizzle-orm";
@@ -61,6 +70,27 @@ export interface IStorage {
   getTotalConversations(): Promise<number>;
   getActiveUsersToday(): Promise<number>;
   getUsersByObjective(): Promise<{ objective: string; count: number }[]>;
+  
+  // AI Knowledge Base methods
+  getAllProducts(): Promise<AiProduct[]>;
+  getActiveProducts(): Promise<AiProduct[]>;
+  createProduct(product: InsertAiProduct): Promise<AiProduct>;
+  updateProduct(id: number, product: Partial<InsertAiProduct>): Promise<AiProduct>;
+  deleteProduct(id: number): Promise<void>;
+  
+  getAllProtocols(): Promise<AiProtocol[]>;
+  getActiveProtocols(): Promise<AiProtocol[]>;
+  getProtocolsByProfile(goal: string, gender?: string, experience?: number): Promise<AiProtocol[]>;
+  createProtocol(protocol: InsertAiProtocol): Promise<AiProtocol>;
+  updateProtocol(id: number, protocol: Partial<InsertAiProtocol>): Promise<AiProtocol>;
+  deleteProtocol(id: number): Promise<void>;
+  
+  getAllKnowledgeBase(): Promise<AiKnowledgeBase[]>;
+  getActiveKnowledgeBase(): Promise<AiKnowledgeBase[]>;
+  getKnowledgeByCategory(category: string): Promise<AiKnowledgeBase[]>;
+  createKnowledge(knowledge: InsertAiKnowledgeBase): Promise<AiKnowledgeBase>;
+  updateKnowledge(id: number, knowledge: Partial<InsertAiKnowledgeBase>): Promise<AiKnowledgeBase>;
+  deleteKnowledge(id: number): Promise<void>;
   
   sessionStore: any;
 }
@@ -251,6 +281,125 @@ export class DatabaseStorage implements IStorage {
       .groupBy(users.goal);
     
     return results.map(r => ({ objective: r.objective, count: r.count }));
+  }
+
+  // AI Products methods
+  async getAllProducts(): Promise<AiProduct[]> {
+    return await db.select().from(aiProducts).orderBy(aiProducts.name);
+  }
+
+  async getActiveProducts(): Promise<AiProduct[]> {
+    return await db.select().from(aiProducts).where(eq(aiProducts.isActive, true)).orderBy(aiProducts.name);
+  }
+
+  async createProduct(insertProduct: InsertAiProduct): Promise<AiProduct> {
+    const [product] = await db.insert(aiProducts).values(insertProduct).returning();
+    return product;
+  }
+
+  async updateProduct(id: number, updateData: Partial<InsertAiProduct>): Promise<AiProduct> {
+    const [product] = await db
+      .update(aiProducts)
+      .set({ ...updateData, updatedAt: new Date() })
+      .where(eq(aiProducts.id, id))
+      .returning();
+    return product;
+  }
+
+  async deleteProduct(id: number): Promise<void> {
+    await db.delete(aiProducts).where(eq(aiProducts.id, id));
+  }
+
+  // AI Protocols methods
+  async getAllProtocols(): Promise<AiProtocol[]> {
+    return await db.select().from(aiProtocols).orderBy(aiProtocols.title);
+  }
+
+  async getActiveProtocols(): Promise<AiProtocol[]> {
+    return await db.select().from(aiProtocols).where(eq(aiProtocols.isActive, true)).orderBy(aiProtocols.title);
+  }
+
+  async getProtocolsByProfile(goal: string, gender?: string, experience?: number): Promise<AiProtocol[]> {
+    let whereConditions = [
+      eq(aiProtocols.isActive, true),
+      eq(aiProtocols.targetGoal, goal)
+    ];
+
+    if (gender) {
+      whereConditions.push(
+        sql`${aiProtocols.targetGender} = ${gender} OR ${aiProtocols.targetGender} = 'both'`
+      );
+    }
+
+    if (experience !== undefined) {
+      whereConditions.push(
+        sql`${aiProtocols.minExperience} <= ${experience}`,
+        sql`(${aiProtocols.maxExperience} IS NULL OR ${aiProtocols.maxExperience} >= ${experience})`
+      );
+    }
+
+    return await db
+      .select()
+      .from(aiProtocols)
+      .where(and(...whereConditions)!)
+      .orderBy(aiProtocols.title);
+  }
+
+  async createProtocol(insertProtocol: InsertAiProtocol): Promise<AiProtocol> {
+    const [protocol] = await db.insert(aiProtocols).values(insertProtocol).returning();
+    return protocol;
+  }
+
+  async updateProtocol(id: number, updateData: Partial<InsertAiProtocol>): Promise<AiProtocol> {
+    const [protocol] = await db
+      .update(aiProtocols)
+      .set({ ...updateData, updatedAt: new Date() })
+      .where(eq(aiProtocols.id, id))
+      .returning();
+    return protocol;
+  }
+
+  async deleteProtocol(id: number): Promise<void> {
+    await db.delete(aiProtocols).where(eq(aiProtocols.id, id));
+  }
+
+  // AI Knowledge Base methods
+  async getAllKnowledgeBase(): Promise<AiKnowledgeBase[]> {
+    return await db.select().from(aiKnowledgeBase).orderBy(aiKnowledgeBase.priority, aiKnowledgeBase.title);
+  }
+
+  async getActiveKnowledgeBase(): Promise<AiKnowledgeBase[]> {
+    return await db
+      .select()
+      .from(aiKnowledgeBase)
+      .where(eq(aiKnowledgeBase.isActive, true))
+      .orderBy(aiKnowledgeBase.priority, aiKnowledgeBase.title);
+  }
+
+  async getKnowledgeByCategory(category: string): Promise<AiKnowledgeBase[]> {
+    return await db
+      .select()
+      .from(aiKnowledgeBase)
+      .where(and(eq(aiKnowledgeBase.category, category), eq(aiKnowledgeBase.isActive, true))!)
+      .orderBy(aiKnowledgeBase.priority, aiKnowledgeBase.title);
+  }
+
+  async createKnowledge(insertKnowledge: InsertAiKnowledgeBase): Promise<AiKnowledgeBase> {
+    const [knowledge] = await db.insert(aiKnowledgeBase).values(insertKnowledge).returning();
+    return knowledge;
+  }
+
+  async updateKnowledge(id: number, updateData: Partial<InsertAiKnowledgeBase>): Promise<AiKnowledgeBase> {
+    const [knowledge] = await db
+      .update(aiKnowledgeBase)
+      .set({ ...updateData, updatedAt: new Date() })
+      .where(eq(aiKnowledgeBase.id, id))
+      .returning();
+    return knowledge;
+  }
+
+  async deleteKnowledge(id: number): Promise<void> {
+    await db.delete(aiKnowledgeBase).where(eq(aiKnowledgeBase.id, id));
   }
 }
 

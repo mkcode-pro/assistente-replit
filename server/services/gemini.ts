@@ -24,6 +24,30 @@ export async function generateAIResponse(
     const temperature = parseFloat(await ConfigManager.get("ai_temperature", "0.7"));
     const model = await ConfigManager.get("ai_model", "gemini-2.5-flash");
 
+    // Get knowledge base data
+    const [products, protocols, generalKnowledge, safetyInfo] = await Promise.all([
+      ConfigManager.getActiveProducts(),
+      ConfigManager.getProtocolsByProfile(userProfile.goal, userProfile.gender, userProfile.experience),
+      ConfigManager.getKnowledgeByCategory("general_guidelines"),
+      ConfigManager.getKnowledgeByCategory("safety_info")
+    ]);
+
+    // Build knowledge context
+    const productsContext = products.length > 0 ? `
+PRODUTOS DISPONÍVEIS:
+${products.map(p => `- ${p.name} (${p.category}): ${p.description}${p.dosageInfo ? ' | Dosagem: ' + p.dosageInfo : ''}${p.contraindications ? ' | Contraindicações: ' + p.contraindications : ''}`).join('\n')}
+` : '';
+
+    const protocolsContext = protocols.length > 0 ? `
+PROTOCOLOS RECOMENDADOS PARA SEU PERFIL:
+${protocols.map(p => `- ${p.title}: ${JSON.stringify(p.protocolSteps)}${p.warnings ? ' | Avisos: ' + p.warnings : ''}`).join('\n')}
+` : '';
+
+    const safetyContext = safetyInfo.length > 0 ? `
+INFORMAÇÕES DE SEGURANÇA:
+${safetyInfo.map(s => `- ${s.title}: ${s.content}`).join('\n')}
+` : '';
+
     const contextualPrompt = `
 PERFIL DO USUÁRIO:
 - Gênero: ${userProfile.gender}
@@ -32,12 +56,16 @@ PERFIL DO USUÁRIO:
 - Idade: ${userProfile.age} anos
 - Experiência: ${userProfile.experience} anos
 
+${productsContext}${protocolsContext}${safetyContext}
+
 HISTÓRICO DA CONVERSA:
 ${conversationHistory.slice(-5).map(h => `${h.sender}: ${h.message}`).join('\n')}
 
 PERGUNTA ATUAL: ${message}
 
-Responda em português brasileiro com base no perfil e histórico fornecidos.`;
+IMPORTANTE: Use apenas os produtos listados acima. Se não temos um produto, explique que não trabalhamos com ele e sugira alternativas dos nossos produtos disponíveis.
+
+Responda em português brasileiro com base no perfil, conhecimento disponível e histórico fornecidos.`;
 
     const response = await ai.models.generateContent({
       model,
@@ -56,13 +84,27 @@ Responda em português brasileiro com base no perfil e histórico fornecidos.`;
 }
 
 export async function generateInitialAnalysis(userProfile: UserProfile): Promise<string> {
-  // Get configurations from database
-  const systemPrompt = await ConfigManager.get("ai_system_prompt", "Você é um assistente especializado em protocolos ergogênicos.");
-  const temperature = parseFloat(await ConfigManager.get("ai_temperature", "0.8"));
-  const model = await ConfigManager.get("ai_model", "gemini-2.5-flash");
-  const welcomeMessage = await ConfigManager.get("welcome_message", "Bem-vindo! Como posso ajudá-lo?");
+  try {
+    // Get configurations from database
+    const systemPrompt = await ConfigManager.get("ai_system_prompt", "Você é um assistente especializado em protocolos ergogênicos.");
+    const temperature = parseFloat(await ConfigManager.get("ai_temperature", "0.8"));
+    const model = await ConfigManager.get("ai_model", "gemini-2.5-flash");
+    const welcomeMessage = await ConfigManager.get("welcome_message", "Bem-vindo! Como posso ajudá-lo?");
 
-  const prompt = `Analise este perfil de usuário e forneça uma análise inicial personalizada:
+    // Get relevant protocols and knowledge for this profile
+    const [protocols, generalKnowledge] = await Promise.all([
+      ConfigManager.getProtocolsByProfile(userProfile.goal, userProfile.gender, userProfile.experience),
+      ConfigManager.getKnowledgeByCategory("general_guidelines")
+    ]);
+
+    const protocolsContext = protocols.length > 0 ? `
+PROTOCOLOS DISPONÍVEIS PARA SEU PERFIL:
+${protocols.slice(0, 3).map(p => `- ${p.title}: Duração ${p.duration || 'variável'}`).join('\n')}
+` : '';
+
+    const prompt = `${welcomeMessage}
+
+Analise este perfil de usuário e forneça uma análise inicial personalizada:
 
 PERFIL:
 - Gênero: ${userProfile.gender}
@@ -71,9 +113,10 @@ PERFIL:
 - Idade: ${userProfile.age} anos
 - Experiência: ${userProfile.experience} anos
 
-Forneça uma análise completa seguindo a estrutura de resposta padrão.`;
+${protocolsContext}
 
-  try {
+Forneça uma análise completa seguindo a estrutura de resposta padrão e mencione brevemente os protocolos mais adequados para este perfil.`;
+
     const response = await ai.models.generateContent({
       model,
       config: {
@@ -83,9 +126,9 @@ Forneça uma análise completa seguindo a estrutura de resposta padrão.`;
       contents: prompt,
     });
 
-    return response.text || welcomeMessage;
+    return response.text || "Bem-vindo ao Império Pharma! Vou analisar seu perfil e fornecer recomendações personalizadas.";
   } catch (error) {
     console.error("Gemini API error:", error);
-    return welcomeMessage;
+    throw new Error("Erro na IA. Tente novamente em alguns instantes.");
   }
 }
