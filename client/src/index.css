@@ -1,0 +1,189 @@
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Orbitron:wght@400;700;900&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  --background: hsl(0, 0%, 100%);
+  --foreground: hsl(20, 14.3%, 4.1%);
+  --muted: hsl(60, 4.8%, 95.9%);
+  --muted-foreground: hsl(25, 5.3%, 44.7%);
+  --popover: hsl(0, 0%, 100%);
+  --popover-foreground: hsl(20, 14.3%, 4.1%);
+  --card: hsl(0, 0%, 100%);
+  --card-foreground: hsl(20, 14.3%, 4.1%);
+  --border: hsl(20, 5.9%, 90%);
+  --input: hsl(20, 5.9%, 90%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(60, 4.8%, 95.9%);
+  --secondary-foreground: hsl(24, 9.8%, 10%);
+  --accent: hsl(60, 4.8%, 95.9%);
+  --accent-foreground: hsl(24, 9.8%, 10%);
+  --destructive: hsl(0, 84.2%, 60.2%);
+  --destructive-foreground: hsl(60, 9.1%, 97.8%);
+  --ring: hsl(20, 14.3%, 4.1%);
+  --radius: 0.5rem;
+
+  /* Custom Pharma Colors */
+  --pharma-dark: hsl(215, 84%, 7%);
+  --pharma-blue: hsl(218, 70%, 29%);
+  --pharma-blue-light: hsl(218, 70%, 45%);
+  --pharma-green: hsl(142, 100%, 50%);
+  --glass-bg: hsla(0, 0%, 100%, 0.1);
+  --glass-border: hsla(0, 0%, 100%, 0.2);
+}
+
+.dark {
+  --background: hsl(215, 84%, 7%);
+  --foreground: hsl(0, 0%, 98%);
+  --muted: hsl(240, 3.7%, 15.9%);
+  --muted-foreground: hsl(240, 5%, 64.9%);
+  --popover: hsl(240, 10%, 3.9%);
+  --popover-foreground: hsl(0, 0%, 98%);
+  --card: hsl(240, 10%, 3.9%);
+  --card-foreground: hsl(0, 0%, 98%);
+  --border: hsl(240, 3.7%, 15.9%);
+  --input: hsl(240, 3.7%, 15.9%);
+  --primary: hsl(207, 90%, 54%);
+  --primary-foreground: hsl(211, 100%, 99%);
+  --secondary: hsl(240, 3.7%, 15.9%);
+  --secondary-foreground: hsl(0, 0%, 98%);
+  --accent: hsl(240, 3.7%, 15.9%);
+  --accent-foreground: hsl(0, 0%, 98%);
+  --destructive: hsl(0, 62.8%, 30.6%);
+  --destructive-foreground: hsl(0, 0%, 98%);
+  --ring: hsl(240, 4.9%, 83.9%);
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply font-sans antialiased bg-background text-foreground;
+  }
+}
+
+/* Import Google Fonts */
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&family=Orbitron:wght@400;700;900&display=swap');
+
+/* Custom animations and effects */
+@keyframes spin-slow {
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+}
+
+@keyframes pulse-glow {
+  0%, 100% { 
+    text-shadow: 0 0 10px hsl(218, 70%, 45%), 0 0 20px hsl(218, 70%, 45%), 0 0 30px hsl(218, 70%, 45%);
+  }
+  50% { 
+    text-shadow: 0 0 15px hsl(218, 70%, 55%), 0 0 25px hsl(218, 70%, 55%), 0 0 35px hsl(218, 70%, 55%);
+  }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes typing {
+  0%, 50% { opacity: 1; }
+  51%, 100% { opacity: 0; }
+}
+
+@keyframes slideInFromBottom {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Utility classes */
+.orbitron {
+  font-family: 'Orbitron', monospace;
+}
+
+.glass-effect {
+  background: var(--glass-bg);
+  backdrop-filter: blur(10px);
+  border: 1px solid var(--glass-border);
+}
+
+.text-glow {
+  text-shadow: 0 0 10px hsl(218, 70%, 45%), 0 0 20px hsl(218, 70%, 45%), 0 0 30px hsl(218, 70%, 45%);
+}
+
+.green-glow {
+  box-shadow: 0 0 20px hsla(142, 100%, 50%, 0.5), 0 0 40px hsla(142, 100%, 50%, 0.3);
+}
+
+.blue-glow {
+  box-shadow: 0 0 20px hsla(218, 70%, 45%, 0.5), 0 0 40px hsla(218, 70%, 45%, 0.3);
+}
+
+.animate-spin-slow {
+  animation: spin-slow 8s linear infinite;
+}
+
+.animate-pulse-glow {
+  animation: pulse-glow 2s ease-in-out infinite alternate;
+}
+
+.animate-float {
+  animation: float 3s ease-in-out infinite;
+}
+
+.animate-typing {
+  animation: typing 1.5s infinite;
+}
+
+.chat-bubble {
+  animation: slideInFromBottom 0.3s ease-out;
+}
+
+/* Background gradient */
+.pharma-gradient {
+  background: linear-gradient(135deg, hsl(215, 84%, 7%) 0%, hsl(0, 0%, 0%) 100%);
+}
+
+/* Custom scrollbar */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 6px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: hsla(0, 0%, 100%, 0.1);
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: hsl(218, 70%, 45%);
+  border-radius: 3px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb:hover {
+  background: hsl(218, 70%, 55%);
+}
+
+/* Mobile responsive adjustments */
+@media (max-width: 768px) {
+  .text-glow {
+    text-shadow: 0 0 5px hsl(218, 70%, 45%), 0 0 10px hsl(218, 70%, 45%);
+  }
+  
+  .green-glow {
+    box-shadow: 0 0 10px hsla(142, 100%, 50%, 0.4), 0 0 20px hsla(142, 100%, 50%, 0.2);
+  }
+  
+  .blue-glow {
+    box-shadow: 0 0 10px hsla(218, 70%, 45%, 0.4), 0 0 20px hsla(218, 70%, 45%, 0.2);
+  }
+}
