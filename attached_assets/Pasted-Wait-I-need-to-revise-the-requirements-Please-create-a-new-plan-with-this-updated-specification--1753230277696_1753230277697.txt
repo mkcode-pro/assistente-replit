@@ -1,0 +1,69 @@
+Wait, I need to revise the requirements. Please create a new plan with this updated specification:
+
+Create a complete AI-powered ergogenic protocol assistant with futuristic design:
+
+🚨 CRITICAL: Everything MUST be in Brazilian Portuguese (PT-BR)!
+
+## 1. LANDING PAGE (MANDATORY - FUTURISTIC DESIGN)
+Create an impressive hero section:
+- Full viewport height (100vh)
+- Animated gradient background (#0a0a0a → #1e3c72 → #2a5298)
+- Floating particles effect (like Matrix rain or stars)
+- Large "IMPÉRIO PHARMA" logo with neon glow effect
+- Subtitle with typewriter effect: "Inteligência Artificial para Protocolos Ergogênicos"
+- Glowing button "INICIAR CONSULTA" with pulse animation
+- Smooth scroll down indicator
+- CSS: @keyframes for fadeIn, glow, pulse, float animations
+
+## 2. USER PROFILE FORM (After hero section)
+- Glassmorphism container (backdrop-filter: blur(10px))
+- Title: "Complete seu Perfil"
+- All fields in Portuguese with blue glow on focus:
+  * Gênero: Radio (Masculino/Feminino)
+  * Objetivo: Select (Ganho de Massa/Cutting/Recomposição/Força)
+  * Preferências: Checkboxes (Orais/Injetáveis/Ambos)
+  * Idade: Number (18-100)
+  * Experiência: Number (anos)
+- Submit: "Iniciar Consultoria Personalizada" (gradient button)
+- Smooth form validation
+
+## 3. CHAT INTERFACE
+- Futuristic message bubbles with glow effects
+- User: Blue gradient, right-aligned
+- AI: Dark with blue border, left-aligned
+- Glassmorphism input area
+- Typing indicator with wave animation
+- Auto-scroll, smooth animations
+
+## 4. BACKEND
+- Node.js + Express
+- Gemini API (GEMINI_API_KEY env)
+- SQLite for storage
+- Rate limiting: 10/min
+- CORS enabled
+
+## 5. AI SYSTEM
+- Model: gemini-1.5-flash
+- Context-aware responses
+- Focus: Ergogenic protocols ONLY
+- Response structure: Analysis → Protocol → PCT → Warnings
+- ALWAYS respond in PT-BR
+
+## 6. CSS REQUIREMENTS
+Must include:
+- Gradient animations
+- Glow effects (box-shadow)
+- Glassmorphism
+- Smooth transitions
+- Custom scrollbar
+- Mobile responsive
+- Dark theme throughout
+
+## 7. FILE STRUCTURE
+- public/index.html (with hero + form + chat)
+- public/styles.css (all futuristic styles)
+- public/app.js (frontend logic)
+- src/ai-config.js (prompts in PT-BR)
+- index.js (server)
+
+Production-ready, modern JS, no TypeScript. Make it look premium!
