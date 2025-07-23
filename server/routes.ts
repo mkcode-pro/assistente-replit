@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertUserSchema, insertConversationSchema } from "@shared/schema";
-import { generateAIResponse, generateInitialAnalysis, generateSingleConsultation } from "./services/gemini";
+import { generateInitialAnalysis, generateSingleConsultation } from "./services/gemini";
 import rateLimit from "express-rate-limit";
 import { registerAdminRoutes } from "./admin-routes";
 
