@@ -5,6 +5,10 @@ interface LandingProps {
 }
 
 export default function Landing({ onStart }: LandingProps) {
+  const handleNavigateToCalculators = () => {
+    window.location.href = '/calculadoras';
+  };
+  
   return (
     <div className="min-h-screen flex flex-col text-white">
       {/* Header */}
@@ -63,7 +67,10 @@ export default function Landing({ onStart }: LandingProps) {
             <h4 className="font-bold mb-2 text-blue-400">Científicas</h4>
             <h4 className="font-bold mb-4 text-blue-400">Inteligentes</h4>
             <p className="text-sm text-gray-300 mb-4">Algoritmos de última geração desenvolvidos por especialistas para otimização máxima de resultados.</p>
-            <button className="text-green-400 text-sm font-semibold hover:text-green-300 transition-colors">
+            <button 
+              onClick={handleNavigateToCalculators}
+              className="text-green-400 text-sm font-semibold hover:text-green-300 transition-colors"
+            >
               ACESSAR <i className="fas fa-arrow-right ml-1"></i>
             </button>
           </div>
@@ -75,7 +82,10 @@ export default function Landing({ onStart }: LandingProps) {
             </div>
             <h3 className="font-bold mb-2">Calculadoras de Massa e Calorias</h3>
             <p className="text-sm text-gray-300 mb-4">Cálculos precisos para composição corporal e necessidades calóricas personalizadas.</p>
-            <button className="text-green-400 text-sm font-semibold hover:text-green-300 transition-colors">
+            <button 
+              onClick={handleNavigateToCalculators}
+              className="text-green-400 text-sm font-semibold hover:text-green-300 transition-colors"
+            >
               ACESSAR <i className="fas fa-arrow-right ml-1"></i>
             </button>
           </div>
@@ -88,7 +98,10 @@ export default function Landing({ onStart }: LandingProps) {
             <h3 className="font-bold mb-2">Calculadora de TBM</h3>
             <h4 className="font-bold mb-4 text-blue-400">(Taxa Basal Metabólica)</h4>
             <p className="text-sm text-gray-300 mb-4">Determine sua taxa metabólica basal com precisão científica para protocolos otimizados.</p>
-            <button className="text-green-400 text-sm font-semibold hover:text-green-300 transition-colors">
+            <button 
+              onClick={handleNavigateToCalculators}
+              className="text-green-400 text-sm font-semibold hover:text-green-300 transition-colors"
+            >
               ACESSAR <i className="fas fa-arrow-right ml-1"></i>
             </button>
           </div>

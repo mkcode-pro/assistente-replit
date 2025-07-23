@@ -110,4 +110,32 @@ The application follows a modern full-stack architecture with the following key 
 - **Security**: Input validation, CORS configuration, session management
 - **Performance**: Optimized queries, lazy loading, and efficient state management
 
-The application is designed to be scalable, maintainable, and user-friendly while providing specialized AI-powered ergogenic protocol consultations with a distinctive futuristic aesthetic.
+### New Features Added (January 2025)
+- **Complete Admin Panel**: Full administrative dashboard with login (admin/senha123)
+  - Real-time analytics and user statistics
+  - User management and conversation monitoring
+  - System settings configuration
+  - API usage tracking and cost analysis
+- **Scientific Calculators**: Professional-grade calculation tools
+  - TMB (Taxa Metabólica Basal) Calculator with activity levels
+  - Macronutrient distribution calculator for different objectives
+  - Calorie planning calculator with goal-based recommendations
+- **PostgreSQL Database**: Full database integration
+  - User profiles and conversation history
+  - Admin accounts and system settings
+  - API usage analytics and calculation history
+- **Enhanced Navigation**: Seamless routing between main app, calculators, and admin panel
+
+### Admin Panel Features
+- **Dashboard**: Comprehensive system overview with real-time metrics
+- **User Management**: View all registered users and their profiles
+- **Conversation Logs**: Monitor all AI interactions and messages
+- **System Configuration**: Manage AI prompts and system settings
+- **Analytics**: Track API usage, costs, and user behavior patterns
+
+### Calculator Features
+- **TMB Calculator**: Scientifically accurate metabolic rate calculations
+- **Macros Calculator**: Personalized macronutrient distribution
+- **Calories Calculator**: Goal-oriented caloric planning with timelines
+
+The application is designed to be scalable, maintainable, and user-friendly while providing specialized AI-powered ergogenic protocol consultations with a distinctive futuristic aesthetic and comprehensive administrative capabilities.

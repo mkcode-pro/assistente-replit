@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { insertUserSchema, insertConversationSchema } from "@shared/schema";
 import { generateAIResponse, generateInitialAnalysis } from "./services/gemini";
 import rateLimit from "express-rate-limit";
+import { registerAdminRoutes } from "./admin-routes";
 
 const chatRateLimit = rateLimit({
   windowMs: 60 * 1000, // 1 minute
@@ -14,6 +15,9 @@ const chatRateLimit = rateLimit({
 });
 
 export async function registerRoutes(app: Express): Promise<Server> {
+  // Register admin routes
+  registerAdminRoutes(app);
+  
   // Create user profile
   app.post("/api/profile", async (req, res) => {
     try {
