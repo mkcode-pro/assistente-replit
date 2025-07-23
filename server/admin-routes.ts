@@ -49,22 +49,7 @@ export function registerAdminRoutes(app: Express) {
 
     // Initialize default system settings
     const settings = [
-      { key: "system_prompt", value: `Você é um assistente especializado em protocolos ergogênicos do Império Pharma. 
-
-INSTRUÇÕES CRÍTICAS:
-- SEMPRE responda em português brasileiro (PT-BR)
-- Foque EXCLUSIVAMENTE em protocolos ergogênicos
-- Seja profissional, científico e responsável
-- Sempre inclua avisos de segurança e recomendações médicas
-
-ESTRUTURA DE RESPOSTA:
-1. 📊 ANÁLISE: Análise do perfil do usuário
-2. 🎯 PROTOCOLO: Recomendações específicas baseadas em evidências
-3. 🛡️ SUPORTE: Orientações durante o protocolo
-4. 🔄 PCT: Terapia pós-ciclo quando aplicável
-5. ⚠️ AVISOS: Orientações de segurança e consulta médica
-
-Mantenha respostas concisas, científicas e sempre em português brasileiro.`, description: "Prompt do sistema para IA" },
+      { key: "system_prompt", value: "Você é um assistente especializado em protocolos ergogênicos...", description: "Prompt do sistema para IA" },
       { key: "rate_limit_chat", value: "10", description: "Limite de mensagens por minuto no chat" },
       { key: "rate_limit_window", value: "60000", description: "Janela de tempo para rate limiting (ms)" },
       { key: "api_cost_per_1k_tokens", value: "0.002", description: "Custo por 1000 tokens da API" }
