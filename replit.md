@@ -1,151 +1,171 @@
 # Império Pharma - AI-Powered Ergogenic Protocol Assistant
 
-## Overview
+## Visão Geral do Projeto
 
-This is a full-stack AI-powered web application designed to provide personalized ergogenic protocol consultations in Brazilian Portuguese (PT-BR). The system features a futuristic design with glassmorphism effects, animated gradients, and AI-powered chat functionality using Google's Gemini API.
+Sistema web avançado de consultoria em protocolos ergogênicos, desenvolvido exclusivamente para o mercado brasileiro. Combina inteligência artificial com design futurista para fornecer recomendações científicas personalizadas em saúde e performance.
 
-## User Preferences
+### Status Atual
+✅ **Produção** - Sistema completamente funcional e otimizado para mobile
 
-Preferred communication style: Simple, everyday language.
-Language: Brazilian Portuguese (PT-BR) only for all responses and interactions.
+## Preferências do Usuário
 
-## System Architecture
+- **Linguagem**: Português brasileiro (PT-BR) exclusivamente
+- **Comunicação**: Linguagem simples e cotidiana
+- **Design**: Mobile-first com responsividade total
+- **Tema**: Futurista com efeitos glassmorphism
 
-The application follows a modern full-stack architecture with the following key components:
+## Arquitetura Técnica
 
-### Frontend Architecture
-- **Framework**: React with TypeScript
-- **Styling**: Tailwind CSS with custom futuristic design system
-- **UI Components**: Radix UI primitives with shadcn/ui components
-- **State Management**: React Query for server state management
-- **Routing**: Wouter for client-side routing
-- **Build Tool**: Vite for development and bundling
+### Stack Frontend
+- **Framework**: React 18 + TypeScript
+- **Build**: Vite com HMR
+- **Styling**: Tailwind CSS + Sistema customizado
+- **UI**: Radix UI + shadcn/ui
+- **Estado**: TanStack React Query v5
+- **Roteamento**: Wouter
+- **Validação**: Zod + React Hook Form
 
-### Backend Architecture
-- **Runtime**: Node.js with Express.js server
-- **Language**: TypeScript with ES modules
-- **API Structure**: RESTful API with structured endpoints
-- **Rate Limiting**: Express rate limiting (10 requests/minute for chat)
-- **Middleware**: CORS enabled, JSON parsing, request logging
+### Stack Backend
+- **Runtime**: Node.js 20 + Express.js
+- **Linguagem**: TypeScript (ESM)
+- **Database**: PostgreSQL + Drizzle ORM
+- **AI**: Google Gemini 2.5-flash
+- **Autenticação**: Passport.js + Sessions
+- **Rate Limiting**: Express-rate-limit configurável
 
-### Database Architecture
-- **ORM**: Drizzle ORM for type-safe database operations
-- **Schema**: PostgreSQL schema with users and conversations tables
-- **Storage**: In-memory storage implementation for development (MemStorage class)
-- **Migrations**: Drizzle Kit for database migrations
+### Infraestrutura
+- **Database**: Neon PostgreSQL Serverless
+- **Deploy**: Replit Autoscale
+- **Sessions**: PostgreSQL session store
+- **Logs**: Middleware integrado
 
-## Key Components
+## Funcionalidades Implementadas
 
-### 1. Landing Page
-- Full viewport hero section with animated gradient background
-- Floating molecular logo with CSS animations
-- Typewriter effect for subtitle text
-- Glassmorphism design elements
-- Smooth scroll indicators and pulse animations
+### 1. Sistema de IA Conversacional
+- Chat em tempo real com Gemini AI
+- Contexto mantido entre conversas  
+- Prompts do sistema totalmente configuráveis
+- Rate limiting dinâmico via admin
+- Respostas focadas em protocolos ergogênicos
 
-### 2. User Profile System
-- Multi-step form with validation using Zod schemas
-- Profile fields: gender, goals, preferences, age, experience
-- Session-based user identification
-- Form validation with Brazilian Portuguese error messages
+### 2. Calculadoras Científicas
+- **TMB**: Taxa Metabólica Basal com fatores de atividade
+- **Macros**: Distribuição personalizada de macronutrientes
+- **Calorias**: Planejamento calórico orientado a objetivos
+- Interface mobile-first com validação completa
 
-### 3. AI Chat Interface
-- Real-time chat with Google Gemini AI
-- Context-aware responses focused on ergogenic protocols
-- Futuristic message bubbles with glow effects
-- Typing indicators and smooth animations
-- Auto-scroll functionality
+### 3. Painel Administrativo Completo
+- **Dashboard**: Métricas em tempo real
+- **Usuários**: Gestão completa de perfis
+- **Conversas**: Monitoramento de todas as interações
+- **Configurações**: Sistema dinâmico de configuração
+- **Analytics**: Rastreamento de uso e custos de API
 
-### 4. Design System
-- Custom CSS variables for theming
-- Dark mode support with futuristic color palette
-- Glassmorphism effects with backdrop filters
-- CSS animations for glow, pulse, and floating effects
-- Responsive design for mobile and desktop
+### 4. Sistema de Configuração Dinâmica
+- **IA**: Prompts, temperatura, modelo configuráveis
+- **Segurança**: Rate limiting e proteções
+- **Aplicação**: Nome, subtítulo, mensagens
+- **Interface**: Organizada por categorias no admin
 
-## Data Flow
+### 5. Design System Futurista
+- Tema escuro com gradientes animados (#0a1628 + #00ff88)
+- Efeitos glassmorphism e glow
+- Animações CSS customizadas
+- Logo molecular flutuante
+- Responsividade mobile perfeita
 
-1. **User Onboarding**: Users start at the landing page and proceed to profile creation
-2. **Profile Creation**: Form data is validated and stored with session ID
-3. **Chat Initialization**: AI generates initial analysis based on user profile
-4. **Conversation Flow**: Messages are stored and context is maintained for AI responses
-5. **Rate Limiting**: Chat requests are limited to prevent abuse
+## Estrutura do Projeto
 
-## External Dependencies
+```
+├── client/                    # Frontend React
+│   ├── src/
+│   │   ├── components/        # Componentes reutilizáveis
+│   │   ├── pages/            # Páginas da aplicação
+│   │   ├── hooks/            # Custom hooks
+│   │   └── lib/              # Utilitários e configurações
+├── server/                   # Backend Express
+│   ├── services/            # Serviços (AI, Config)
+│   ├── routes.ts           # Rotas principais
+│   ├── admin-routes.ts     # Rotas do admin
+│   ├── storage.ts          # Camada de dados
+│   └── db.ts              # Configuração do banco
+├── shared/                  # Tipos compartilhados
+│   └── schema.ts           # Schemas Drizzle + Zod
+└── docs/                   # Documentação
+```
 
-### AI Integration
-- **Google Gemini AI**: Primary AI service for generating protocol recommendations
-- **API Configuration**: Uses GEMINI_API_KEY or GOOGLE_AI_API_KEY environment variables
-- **Model**: gemini-1.5-flash for fast, context-aware responses
+## Fluxo de Dados
 
-### UI Components
-- **Radix UI**: Accessible component primitives
-- **Lucide React**: Icon library for UI elements
-- **Class Variance Authority**: Utility for component variants
-- **CLSX/Tailwind Merge**: Conditional styling utilities
+1. **Landing Page** → **Perfil do Usuário** → **Chat com IA**
+2. **Admin Login** → **Dashboard** → **Configurações**  
+3. **Calculadoras** → **Resultados** → **Histórico**
 
-### Development Tools
-- **Replit Integration**: Development environment optimizations
-- **Cartographer**: Development mapping tool
-- **Runtime Error Modal**: Enhanced error reporting
+## Configurações do Sistema
 
-## Deployment Strategy
+### Variáveis de Ambiente
+- `DATABASE_URL`: URL do PostgreSQL
+- `GEMINI_API_KEY`: Chave da API do Google Gemini
+- `SESSION_SECRET`: Segredo para sessões (auto-gerado)
 
-### Development Environment
-- Vite development server with HMR
-- Express server with middleware logging
-- In-memory storage for rapid development
-- TypeScript compilation with strict mode
+### Configurações Dinâmicas (Via Admin)
+- **IA**: `ai_system_prompt`, `ai_temperature`, `ai_model`
+- **Segurança**: `rate_limit_minutes`, `rate_limit_requests`
+- **App**: `app_name`, `app_subtitle`, `welcome_message`
 
-### Production Considerations
-- **Database**: Configured for PostgreSQL with Neon Database serverless
-- **Environment Variables**: DATABASE_URL and GEMINI_API_KEY required
-- **Build Process**: Vite build for frontend, esbuild for backend bundling
-- **Session Management**: Uses connect-pg-simple for PostgreSQL session storage
+## Credenciais de Acesso
 
-### Key Features
-- **Internationalization**: All content in Brazilian Portuguese (PT-BR)
-- **Rate Limiting**: 10 requests per minute for chat endpoints
-- **Error Handling**: Comprehensive error boundaries and user feedback
-- **Security**: Input validation, CORS configuration, session management
-- **Performance**: Optimized queries, lazy loading, and efficient state management
+### Admin Panel
+- **URL**: `/admin`
+- **Usuário**: `admin`
+- **Senha**: `senha123`
 
-### New Features Added (January 2025)
-- **Complete Admin Panel**: Full administrative dashboard with login (admin/senha123)
-  - Real-time analytics and user statistics
-  - User management and conversation monitoring
-  - System settings configuration with dynamic updates
-  - API usage tracking and cost analysis
-- **Scientific Calculators**: Professional-grade calculation tools
-  - TMB (Taxa Metabólica Basal) Calculator with activity levels
-  - Macronutrient distribution calculator for different objectives
-  - Calorie planning calculator with goal-based recommendations
-- **PostgreSQL Database**: Full database integration
-  - User profiles and conversation history
-  - Admin accounts and system settings
-  - API usage analytics and calculation history
-- **Enhanced Navigation**: Seamless routing between main app, calculators, and admin panel
-- **Dynamic Configuration System**: All system configurations now managed through admin panel
-  - AI system prompts editable without code changes
-  - Rate limiting parameters configurable
-  - Temperature and model selection
-  - Application name and messages customizable
+## Scripts Disponíveis
 
-### Admin Panel Features
-- **Dashboard**: Comprehensive system overview with real-time metrics
-- **User Management**: View all registered users and their profiles
-- **Conversation Logs**: Monitor all AI interactions and messages
-- **System Configuration**: Complete control over all system settings
-  - AI System Prompt: Full control over AI behavior and responses
-  - AI Temperature: Fine-tune response creativity (0.0-1.0)
-  - AI Model: Select which Gemini model to use
-  - Rate Limiting: Configure request limits and time windows
-  - Application Settings: Name, subtitle, and welcome messages
-- **Analytics**: Track API usage, costs, and user behavior patterns
+```bash
+npm run dev        # Desenvolvimento com HMR
+npm run build      # Build para produção  
+npm run start      # Servidor de produção
+npm run db:push    # Sincronizar schema do banco
+```
 
-### Calculator Features
-- **TMB Calculator**: Scientifically accurate metabolic rate calculations
-- **Macros Calculator**: Personalized macronutrient distribution
-- **Calories Calculator**: Goal-oriented caloric planning with timelines
+## Recursos de Desenvolvimento
 
-The application is designed to be scalable, maintainable, and user-friendly while providing specialized AI-powered ergogenic protocol consultations with a distinctive futuristic aesthetic and comprehensive administrative capabilities.
+### Debugging
+- Console logs integrados no Express
+- React DevTools compatível
+- TypeScript strict mode
+- LSP diagnostics completos
+
+### Performance
+- Lazy loading de componentes
+- Query optimization via TanStack
+- Caching inteligente
+- Bundle splitting automático
+
+## Roadmap Técnico
+
+### Próximas Implementações
+- [ ] Autenticação OAuth (Google/Facebook)  
+- [ ] PWA com service workers
+- [ ] Notificações push
+- [ ] Export de dados para PDF
+- [ ] Multi-idiomas (manter PT-BR como padrão)
+
+### Melhorias Planejadas
+- [ ] Testes automatizados (Jest + Cypress)
+- [ ] CI/CD pipeline
+- [ ] Monitoramento de performance
+- [ ] Backup automático do banco
+
+## Notas de Manutenção
+
+- **Database**: Sempre usar `npm run db:push` para mudanças no schema
+- **Config**: Alterações de sistema devem ser feitas via admin panel
+- **Deploy**: Replit auto-deploy no push para main
+- **Logs**: Verificar workflow console para debugging
+
+---
+
+**Última atualização**: Janeiro 2025  
+**Versão**: 2.0.0  
+**Status**: Produção estável
