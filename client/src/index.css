@@ -183,4 +183,40 @@
   .blue-glow {
     box-shadow: 0 0 10px hsla(218, 70%, 45%, 0.4), 0 0 20px hsla(218, 70%, 45%, 0.2);
   }
+  
+  /* Admin panel specific */
+  .glass-effect {
+    padding: 0.75rem;
+  }
+  
+  /* Reduce font sizes */
+  .orbitron {
+    font-size: 1rem;
+  }
+  
+  /* Full width containers */
+  .container {
+    max-width: 100%;
+    padding: 0.5rem;
+  }
+  
+  /* Table responsive */
+  table {
+    font-size: 0.75rem;
+  }
+  
+  /* Card spacing */
+  .space-y-6 {
+    gap: 1rem;
+  }
+  
+  /* Bottom navigation spacing */
+  main.min-h-screen {
+    padding-bottom: 4rem;
+  }
+}
+
+/* Prevent body scroll when sidebar open */
+.sidebar-open {
+  overflow: hidden;
 }
