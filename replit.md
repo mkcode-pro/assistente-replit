@@ -179,6 +179,7 @@ npm run db:push    # Sincronizar schema do banco
   - Fluxo detalhado de dados desde entrada até resposta da IA
   - Arquitetura técnica completa
   - Configurações e variáveis de ambiente
+  - Criado `LEIAME_IMPORTANTE.md` marcando documentações antigas como obsoletas
 
 ---
 
