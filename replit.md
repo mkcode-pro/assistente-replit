@@ -170,9 +170,18 @@ npm run db:push    # Sincronizar schema do banco
 - **Config**: Alterações de sistema devem ser feitas via admin panel
 - **Deploy**: Replit auto-deploy no push para main
 - **Logs**: Verificar workflow console para debugging
+- **Documentação**: Nova documentação técnica completa disponível em `DOCUMENTACAO_ATUAL.md`
+
+## Mudanças Recentes
+
+- **23/07/2025**: Criada documentação técnica atualizada em `DOCUMENTACAO_ATUAL.md` com:
+  - Estrutura completa de arquivos
+  - Fluxo detalhado de dados desde entrada até resposta da IA
+  - Arquitetura técnica completa
+  - Configurações e variáveis de ambiente
 
 ---
 
-**Última atualização**: Janeiro 2025  
+**Última atualização**: 23 de Julho de 2025  
 **Versão**: 2.0.0  
 **Status**: Produção estável
