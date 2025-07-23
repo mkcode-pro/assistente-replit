@@ -7,6 +7,7 @@ This is a full-stack AI-powered web application designed to provide personalized
 ## User Preferences
 
 Preferred communication style: Simple, everyday language.
+Language: Brazilian Portuguese (PT-BR) only for all responses and interactions.
 
 ## System Architecture
 
