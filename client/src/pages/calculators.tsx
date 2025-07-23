@@ -123,15 +123,16 @@ export default function Calculators() {
   });
 
   const renderTMBCalculator = () => (
-    <div className="space-y-6">
-      <div className="glass-effect rounded-xl p-6">
-        <h3 className="text-lg font-bold mb-4 text-center">
+    <div className="space-y-4 md:space-y-6">
+      <div className="glass-effect rounded-xl p-4 md:p-6">
+        <h3 className="text-base md:text-lg font-bold mb-4 text-center">
           <i className="fas fa-heartbeat mr-2 text-green-400"></i>
-          Calculadora de TMB (Taxa Metabólica Basal)
+          <span className="hidden md:inline">Calculadora de TMB (Taxa Metabólica Basal)</span>
+          <span className="md:hidden">Taxa Metabólica Basal</span>
         </h3>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+          <div className="space-y-3 md:space-y-4">
             <div>
               <label className="block text-sm font-semibold mb-2 text-blue-400">Idade</label>
               <input
@@ -243,15 +244,16 @@ export default function Calculators() {
   );
 
   const renderMacrosCalculator = () => (
-    <div className="space-y-6">
-      <div className="glass-effect rounded-xl p-6">
-        <h3 className="text-lg font-bold mb-4 text-center">
+    <div className="space-y-4 md:space-y-6">
+      <div className="glass-effect rounded-xl p-4 md:p-6">
+        <h3 className="text-base md:text-lg font-bold mb-4 text-center">
           <i className="fas fa-balance-scale mr-2 text-green-400"></i>
-          Calculadora de Macronutrientes
+          <span className="hidden md:inline">Calculadora de Macronutrientes</span>
+          <span className="md:hidden">Macronutrientes</span>
         </h3>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+          <div className="space-y-3 md:space-y-4">
             <div>
               <label className="block text-sm font-semibold mb-2 text-blue-400">Calorias Diárias</label>
               <input
@@ -332,15 +334,16 @@ export default function Calculators() {
   );
 
   const renderCaloriesCalculator = () => (
-    <div className="space-y-6">
-      <div className="glass-effect rounded-xl p-6">
-        <h3 className="text-lg font-bold mb-4 text-center">
+    <div className="space-y-4 md:space-y-6">
+      <div className="glass-effect rounded-xl p-4 md:p-6">
+        <h3 className="text-base md:text-lg font-bold mb-4 text-center">
           <i className="fas fa-target mr-2 text-green-400"></i>
-          Calculadora de Calorias para Objetivo
+          <span className="hidden md:inline">Calculadora de Calorias para Objetivo</span>
+          <span className="md:hidden">Calorias por Objetivo</span>
         </h3>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <div className="space-y-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+          <div className="space-y-3 md:space-y-4">
             <div>
               <label className="block text-sm font-semibold mb-2 text-blue-400">Objetivo</label>
               <select
@@ -442,27 +445,27 @@ export default function Calculators() {
   return (
     <div className="min-h-screen pharma-gradient text-white">
       {/* Header */}
-      <header className="glass-effect p-4 flex items-center justify-between border-b border-gray-600">
-        <div className="flex items-center space-x-3">
+      <header className="glass-effect p-3 md:p-4 flex items-center justify-between border-b border-gray-600">
+        <div className="flex items-center space-x-2 md:space-x-3">
           <MolecularLogo size="sm" />
           <div>
-            <h1 className="orbitron font-bold text-lg text-glow">CALCULADORAS CIENTÍFICAS</h1>
-            <p className="text-xs text-gray-400">Ferramentas de Precisão - Império Pharma</p>
+            <h1 className="orbitron font-bold text-base md:text-lg text-glow">CALCULADORAS</h1>
+            <p className="text-xs text-gray-400 hidden md:block">Ferramentas de Precisão - Império Pharma</p>
           </div>
         </div>
         <button 
           onClick={() => setLocation("/")}
-          className="text-gray-400 hover:text-white transition-colors"
+          className="text-gray-400 hover:text-white transition-colors text-sm md:text-base"
         >
-          <i className="fas fa-home mr-2"></i>
-          Início
+          <i className="fas fa-home mr-1 md:mr-2"></i>
+          <span className="hidden md:inline">Início</span>
         </button>
       </header>
 
-      <div className="p-6">
+      <div className="p-3 md:p-6 max-w-7xl mx-auto">
         {/* Calculator Navigation */}
-        <div className="mb-6 flex justify-center">
-          <nav className="glass-effect rounded-lg p-2 flex space-x-2">
+        <div className="mb-4 md:mb-6 flex justify-center overflow-x-auto">
+          <nav className="glass-effect rounded-lg p-1 md:p-2 flex space-x-1 md:space-x-2">
             {[
               { id: 'tmb', icon: 'heartbeat', label: 'TMB' },
               { id: 'macros', icon: 'chart-pie', label: 'Macros' },
@@ -471,13 +474,13 @@ export default function Calculators() {
               <button
                 key={calc.id}
                 onClick={() => setActiveCalculator(calc.id as any)}
-                className={`flex items-center space-x-2 px-4 py-2 rounded-lg transition-all ${
+                className={`flex items-center space-x-1 md:space-x-2 px-3 md:px-4 py-2 rounded-lg transition-all text-sm md:text-base whitespace-nowrap ${
                   activeCalculator === calc.id 
                     ? 'bg-green-400/20 text-green-400 border border-green-400/30' 
                     : 'hover:bg-gray-800/50 text-gray-300'
                 }`}
               >
-                <i className={`fas fa-${calc.icon}`}></i>
+                <i className={`fas fa-${calc.icon} text-sm md:text-base`}></i>
                 <span>{calc.label}</span>
               </button>
             ))}

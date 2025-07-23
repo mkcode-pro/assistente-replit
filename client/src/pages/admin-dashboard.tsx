@@ -320,6 +320,7 @@ export default function AdminDashboard() {
           ${isMobile ? 'fixed inset-y-0 left-0 z-50 transform transition-transform duration-300' : 'relative'}
           ${isMobile && !sidebarOpen ? '-translate-x-full' : 'translate-x-0'}
           w-64 glass-effect border-r border-gray-600 min-h-screen p-4
+          ${isMobile ? 'bg-gray-900/95 backdrop-blur-lg' : ''}
         `}>
           {/* Mobile close button */}
           {isMobile && (
@@ -363,7 +364,7 @@ export default function AdminDashboard() {
         )}
 
         {/* Main Content */}
-        <main className="flex-1 p-3 md:p-6 min-h-screen">
+        <main className={`flex-1 p-3 md:p-6 min-h-screen ${isMobile ? 'pb-20' : ''}`}>
           {statsLoading || usersLoading || conversationsLoading || settingsLoading ? (
             <div className="flex items-center justify-center h-64">
               <i className="fas fa-spinner animate-spin text-3xl text-green-400"></i>
@@ -382,8 +383,8 @@ export default function AdminDashboard() {
 
       {/* Mobile Bottom Navigation */}
       {isMobile && (
-        <nav className="fixed bottom-0 left-0 right-0 glass-effect border-t border-gray-600 p-2">
-          <div className="flex justify-around">
+        <nav className="fixed bottom-0 left-0 right-0 z-50 glass-effect border-t border-gray-600 p-2 bg-gray-900/95 backdrop-blur-lg">
+          <div className="flex justify-around items-center">
             {[
               { id: 'dashboard', icon: 'tachometer-alt' },
               { id: 'users', icon: 'users' },
@@ -393,13 +394,14 @@ export default function AdminDashboard() {
               <button
                 key={item.id}
                 onClick={() => handleTabChange(item.id as any)}
-                className={`p-3 rounded-lg transition-all ${
+                className={`p-3 rounded-lg transition-all flex flex-col items-center ${
                   activeTab === item.id 
                     ? 'text-green-400' 
                     : 'text-gray-400'
                 }`}
               >
-                <i className={`fas fa-${item.icon} text-xl`}></i>
+                <i className={`fas fa-${item.icon} text-xl mb-1`}></i>
+                <span className="text-xs">{item.id === 'dashboard' ? 'Painel' : item.id === 'users' ? 'Usuários' : item.id === 'conversations' ? 'Conversas' : 'Config'}</span>
               </button>
             ))}
           </div>

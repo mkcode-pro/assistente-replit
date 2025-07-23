@@ -49,40 +49,40 @@ export default function AdminLogin() {
 
   return (
     <div className="min-h-screen pharma-gradient flex flex-col justify-center items-center px-4 text-white">
-      <div className="glass-effect rounded-2xl p-8 w-full max-w-md">
-        <div className="text-center mb-8">
+      <div className="glass-effect rounded-2xl p-6 md:p-8 w-full max-w-md mx-auto">
+        <div className="text-center mb-6 md:mb-8">
           <MolecularLogo size="md" className="mb-4" />
-          <h1 className="orbitron text-2xl font-bold text-glow mb-2">PAINEL ADMINISTRATIVO</h1>
-          <p className="text-gray-400 text-sm">Acesso restrito - Administradores</p>
+          <h1 className="orbitron text-xl md:text-2xl font-bold text-glow mb-2">PAINEL ADMINISTRATIVO</h1>
+          <p className="text-gray-400 text-xs md:text-sm">Acesso restrito - Administradores</p>
         </div>
 
-        <form onSubmit={handleSubmit} className="space-y-6">
+        <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
           <div>
-            <label className="block text-sm font-semibold mb-3 text-blue-400">Usuário</label>
+            <label className="block text-xs md:text-sm font-semibold mb-2 md:mb-3 text-blue-400">Usuário</label>
             <input 
               type="text" 
               placeholder="Digite seu usuário"
               value={credentials.username}
               onChange={(e) => setCredentials({ ...credentials, username: e.target.value })}
-              className="w-full bg-gray-800/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-green-400 focus:border-transparent"
+              className="w-full bg-gray-800/50 border border-gray-600 rounded-lg px-3 md:px-4 py-2 md:py-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-green-400 focus:border-transparent text-sm md:text-base"
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-3 text-blue-400">Senha</label>
+            <label className="block text-xs md:text-sm font-semibold mb-2 md:mb-3 text-blue-400">Senha</label>
             <input 
               type="password" 
               placeholder="Digite sua senha"
               value={credentials.password}
               onChange={(e) => setCredentials({ ...credentials, password: e.target.value })}
-              className="w-full bg-gray-800/50 border border-gray-600 rounded-lg px-4 py-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-green-400 focus:border-transparent"
+              className="w-full bg-gray-800/50 border border-gray-600 rounded-lg px-3 md:px-4 py-2 md:py-3 text-white placeholder-gray-400 focus:ring-2 focus:ring-green-400 focus:border-transparent text-sm md:text-base"
             />
           </div>
 
           <button 
             type="submit" 
             disabled={loginMutation.isPending}
-            className="w-full bg-green-400 hover:bg-green-300 disabled:opacity-50 text-black font-bold py-4 rounded-lg green-glow transition-all duration-300 transform hover:scale-105"
+            className="w-full bg-green-400 hover:bg-green-300 disabled:opacity-50 text-black font-bold py-3 md:py-4 rounded-lg green-glow transition-all duration-300 transform hover:scale-105 text-sm md:text-base"
           >
             {loginMutation.isPending ? (
               <>

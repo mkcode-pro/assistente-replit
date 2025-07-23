@@ -212,11 +212,24 @@
   
   /* Bottom navigation spacing */
   main.min-h-screen {
-    padding-bottom: 4rem;
+    padding-bottom: 5rem !important;
+  }
+  
+  /* Ensure bottom nav is always visible */
+  .fixed.bottom-0 {
+    bottom: 0 !important;
   }
 }
 
 /* Prevent body scroll when sidebar open */
 .sidebar-open {
   overflow: hidden;
+}
+
+/* Ensure glass effect works on mobile */
+@supports (backdrop-filter: blur(10px)) {
+  .glass-effect {
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+  }
 }
