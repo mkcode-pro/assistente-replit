@@ -13,10 +13,9 @@ export interface UserProfile {
   experience: number;
 }
 
-export async function generateAIResponse(
+export async function generateSingleConsultation(
   message: string, 
-  userProfile: UserProfile,
-  conversationHistory: Array<{message: string, sender: string}>
+  userProfile: UserProfile
 ): Promise<string> {
   try {
     // Get configurations from database
@@ -48,8 +47,10 @@ INFORMAÇÕES DE SEGURANÇA:
 ${safetyInfo.map(s => `- ${s.title}: ${s.content}`).join('\n')}
 ` : '';
 
-    const contextualPrompt = `
-PERFIL DO USUÁRIO:
+    const consultationPrompt = `
+SISTEMA DE CONSULTA ÚNICA - PROTOCOLO ERGOGÊNICO
+
+PERFIL DO CLIENTE:
 - Gênero: ${userProfile.gender}
 - Objetivo: ${userProfile.goal}
 - Preferências: ${userProfile.preferences.join(', ')}
@@ -58,14 +59,18 @@ PERFIL DO USUÁRIO:
 
 ${productsContext}${protocolsContext}${safetyContext}
 
-HISTÓRICO DA CONVERSA:
-${conversationHistory.slice(-5).map(h => `${h.sender}: ${h.message}`).join('\n')}
+CONSULTA: ${message}
 
-PERGUNTA ATUAL: ${message}
+INSTRUÇÕES PARA RESPOSTA:
+1. Esta é uma consulta única e completa
+2. Forneça um protocolo detalhado e específico
+3. Use APENAS os produtos listados acima
+4. Inclua todas as informações necessárias em uma única resposta
+5. Estruture a resposta de forma clara e profissional
+6. Inclua dosagens, timing, duração e avisos de segurança
+7. Finalize indicando que a consulta está completa
 
-IMPORTANTE: Use apenas os produtos listados acima. Se não temos um produto, explique que não trabalhamos com ele e sugira alternativas dos nossos produtos disponíveis.
-
-Responda em português brasileiro com base no perfil, conhecimento disponível e histórico fornecidos.`;
+IMPORTANTE: Esta é uma consulta completa e única. Não sugira continuidade de conversa.`;
 
     const response = await ai.models.generateContent({
       model,
@@ -73,7 +78,7 @@ Responda em português brasileiro com base no perfil, conhecimento disponível e
         systemInstruction: systemPrompt,
         temperature,
       },
-      contents: contextualPrompt,
+      contents: consultationPrompt,
     });
 
     return response.text || "Desculpe, não consegui processar sua solicitação. Tente novamente.";

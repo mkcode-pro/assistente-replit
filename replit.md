@@ -5,7 +5,7 @@
 Sistema web avançado de consultoria em protocolos ergogênicos, desenvolvido exclusivamente para o mercado brasileiro. Combina inteligência artificial com design futurista para fornecer recomendações científicas personalizadas em saúde e performance.
 
 ### Status Atual
-✅ **Produção** - Sistema completamente funcional e otimizado para mobile
+✅ **Produção** - Sistema de consulta única implementado e funcionando perfeitamente
 
 ## Preferências do Usuário
 
@@ -41,12 +41,13 @@ Sistema web avançado de consultoria em protocolos ergogênicos, desenvolvido ex
 
 ## Funcionalidades Implementadas
 
-### 1. Sistema de IA Conversacional
-- Chat em tempo real com Gemini AI
-- Contexto mantido entre conversas  
-- Prompts do sistema totalmente configuráveis
+### 1. Sistema de Consulta Única com IA
+- **Consulta única e completa** - evita confusão e alucinações
+- **Protocolo detalhado** gerado em uma única resposta
+- **Download automático** do protocolo em JSON
+- **Limpeza de conversa** após cada consulta
+- **Base de conhecimento integrada** com produtos e protocolos específicos
 - Rate limiting dinâmico via admin
-- Respostas focadas em protocolos ergogênicos
 
 ### 2. Calculadoras Científicas
 - **TMB**: Taxa Metabólica Basal com fatores de atividade
@@ -96,9 +97,15 @@ Sistema web avançado de consultoria em protocolos ergogênicos, desenvolvido ex
 
 ## Fluxo de Dados
 
-1. **Landing Page** → **Perfil do Usuário** → **Chat com IA**
-2. **Admin Login** → **Dashboard** → **Configurações**  
+1. **Landing Page** → **Perfil do Usuário** → **Consulta Única** → **Download do Protocolo**
+2. **Admin Login** → **Dashboard** → **Configurações** → **Gestão de Base de Conhecimento**
 3. **Calculadoras** → **Resultados** → **Histórico**
+
+### Novo Fluxo de Consulta:
+- Usuário faz **UMA pergunta completa**
+- IA gera **protocolo detalhado** com base na base de conhecimento
+- Conversa **encerra automaticamente**
+- Usuário pode **baixar o protocolo** ou **fazer nova consulta**
 
 ## Configurações do Sistema
 

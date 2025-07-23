@@ -2,7 +2,7 @@ import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertUserSchema, insertConversationSchema } from "@shared/schema";
-import { generateAIResponse, generateInitialAnalysis } from "./services/gemini";
+import { generateAIResponse, generateInitialAnalysis, generateSingleConsultation } from "./services/gemini";
 import rateLimit from "express-rate-limit";
 import { registerAdminRoutes } from "./admin-routes";
 
@@ -73,8 +73,8 @@ export async function registerRoutes(app: Express): Promise<Server> {
     }
   });
 
-  // Send message to AI
-  app.post("/api/chat", chatRateLimit, async (req, res) => {
+  // Single consultation endpoint
+  app.post("/api/consultation", chatRateLimit, async (req, res) => {
     try {
       const messageData = insertConversationSchema.parse(req.body);
       
@@ -84,13 +84,13 @@ export async function registerRoutes(app: Express): Promise<Server> {
         return res.status(404).json({ error: "Usuário não encontrado" });
       }
 
-      // Save user message
+      // Clear any previous consultation for this session
+      await storage.clearConversations(messageData.sessionId);
+
+      // Save user consultation question
       await storage.addMessage(messageData);
 
-      // Get conversation history
-      const history = await storage.getConversations(messageData.sessionId);
-      
-      // Generate AI response
+      // Generate single consultation response
       const userProfile = {
         gender: user.gender,
         goal: user.goal,
@@ -99,23 +99,66 @@ export async function registerRoutes(app: Express): Promise<Server> {
         experience: user.experience
       };
 
-      const aiResponse = await generateAIResponse(
+      const consultationResponse = await generateSingleConsultation(
         messageData.message,
-        userProfile,
-        history.map(h => ({ message: h.message, sender: h.sender }))
+        userProfile
       );
 
-      // Save AI response
+      // Save AI consultation response
       const aiMessage = await storage.addMessage({
         sessionId: messageData.sessionId,
-        message: aiResponse,
+        message: consultationResponse,
         sender: "ai"
       });
 
-      res.json(aiMessage);
+      // Mark consultation as completed
+      res.json({ 
+        ...aiMessage, 
+        consultationComplete: true,
+        canDownload: true
+      });
     } catch (error: any) {
-      console.error("Chat error:", error);
+      console.error("Consultation error:", error);
       res.status(500).json({ error: "Erro interno do servidor. Tente novamente." });
+    }
+  });
+
+  // Download consultation protocol as PDF/Text
+  app.get("/api/consultation/:sessionId/download", async (req, res) => {
+    try {
+      const conversations = await storage.getConversations(req.params.sessionId);
+      const user = await storage.getUser(req.params.sessionId);
+      
+      if (!conversations.length || !user) {
+        return res.status(404).json({ error: "Consulta não encontrada" });
+      }
+
+      const userQuestion = conversations.find(c => c.sender === "user");
+      const aiResponse = conversations.find(c => c.sender === "ai");
+
+      if (!aiResponse) {
+        return res.status(404).json({ error: "Protocolo não encontrado" });
+      }
+
+      const protocolContent = {
+        consultaData: new Date().toLocaleDateString('pt-BR'),
+        perfilUsuario: {
+          idade: user.age,
+          genero: user.gender,
+          objetivo: user.goal,
+          experiencia: user.experience,
+          preferencias: user.preferences
+        },
+        pergunta: userQuestion?.message || "Consulta geral",
+        protocolo: aiResponse.message,
+        observacoes: "Este protocolo foi gerado por IA e deve ser acompanhado por profissional da saúde."
+      };
+
+      res.setHeader('Content-Type', 'application/json');
+      res.setHeader('Content-Disposition', 'attachment; filename="protocolo-imperio-pharma.json"');
+      res.json(protocolContent);
+    } catch (error: any) {
+      res.status(500).json({ error: error.message });
     }
   });
 

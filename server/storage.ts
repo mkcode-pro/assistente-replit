@@ -46,6 +46,7 @@ export interface IStorage {
   addMessage(conversation: InsertConversation): Promise<Conversation>;
   getAllConversations(): Promise<Conversation[]>;
   searchConversations(query: string, startDate?: Date, endDate?: Date): Promise<Conversation[]>;
+  clearConversations(sessionId: string): Promise<void>;
   
   // Admin methods
   getAdmin(username: string): Promise<Admin | undefined>;
@@ -158,6 +159,10 @@ export class DatabaseStorage implements IStorage {
       .from(conversations)
       .where(whereClause)
       .orderBy(desc(conversations.timestamp));
+  }
+
+  async clearConversations(sessionId: string): Promise<void> {
+    await db.delete(conversations).where(eq(conversations.sessionId, sessionId));
   }
 
   // Admin methods
