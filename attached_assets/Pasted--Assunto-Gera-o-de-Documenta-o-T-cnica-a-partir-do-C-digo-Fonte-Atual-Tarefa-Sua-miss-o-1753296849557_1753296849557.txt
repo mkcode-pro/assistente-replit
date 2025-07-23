@@ -1,0 +1,38 @@
+**Assunto:** Geração de Documentação Técnica a partir do Código-Fonte Atual
+
+**Tarefa:**
+
+Sua missão é atuar como um engenheiro de software sênior encarregado de documentar um projeto existente. Analise 100% do código-fonte e da estrutura de arquivos **atuais** deste repositório para gerar um "manual técnico" completo.
+
+O arquivo de saída deve ser em formato Markdown e nomeado `DOCUMENTACAO_PROJETO.md`.
+
+O objetivo é que qualquer desenvolvedor possa ler este documento e compreender a arquitetura, o fluxo de dados e a lógica de negócio da aplicação.
+
+Por favor, siga estritamente a estrutura abaixo, preenchendo cada seção com base no que você encontrar no código:
+
+**1. Visão Geral e Objetivo do Projeto**
+   - Qual é o propósito fundamental desta aplicação? O que ela faz?
+
+**2. Tecnologias e Dependências**
+   - Liste as principais tecnologias, linguagens e frameworks utilizados (ex: React, Vite, TypeScript, PHP, etc.).
+   - Liste as dependências de projeto encontradas (ex: em `package.json`), com uma breve descrição do papel de cada uma.
+
+**3. Estrutura de Arquivos e Pastas**
+   - Apresente a árvore de diretórios completa do projeto.
+   - Forneça uma descrição clara da responsabilidade de cada pasta e dos arquivos mais importantes que você identificar.
+
+**4. Arquitetura e Fluxo de Dados**
+   - Descreva o fluxo de dados principal da aplicação, passo a passo. Comece pela interação do usuário e siga o caminho dos dados:
+     - Como a entrada do usuário é capturada?
+     - Para onde essa entrada é enviada? (ex: uma função, um endpoint de API)
+     - Identifique o exato local no código (arquivo e função) que se comunica com a API externa de Inteligência Artificial.
+     - Como a resposta da API é tratada e processada?
+     - Como o resultado final é renderizado de volta para o usuário?
+
+**5. Componentes Chave e Lógica de Negócio**
+   - Identifique e detalhe os componentes de software ou arquivos mais críticos para a funcionalidade do projeto. Explique a lógica contida em cada um deles.
+
+**6. Estilização e UI**
+   - Explique como a estilização da interface do usuário (UI) é gerenciada. Aponte os arquivos relevantes (ex: `.css`, `.module.css`, classes do Tailwind, etc.).
+
+Execute esta análise com base exclusivamente no estado atual do projeto. Não faça suposições com base em projetos anteriores.
