@@ -2,7 +2,7 @@
 
 > Sistema inteligente de consultoria em protocolos ergogênicos para o mercado brasileiro
 
-[![Deploy Status](https://img.shields.io/badge/deploy-live-success)](https://replit.com/@username/imperio-pharma)
+[![Deploy Status](https://img.shields.io/badge/deploy-live-success)](https://github.com/mkcode-pro/assistente-replit)
 [![Node Version](https://img.shields.io/badge/node-20.x-green)](https://nodejs.org/)
 [![TypeScript](https://img.shields.io/badge/typescript-5.x-blue)](https://www.typescriptlang.org/)
 [![License](https://img.shields.io/badge/license-Private-red)](LICENSE)
@@ -22,9 +22,9 @@ Plataforma web moderna que combina inteligência artificial avançada com design
 
 ## 🚀 Demo
 
-- **App Principal**: [https://seu-dominio.replit.app](https://seu-dominio.replit.app)
-- **Calculadoras**: [/calculators](https://seu-dominio.replit.app/calculators)  
-- **Admin Panel**: [/admin](https://seu-dominio.replit.app/admin) (admin/senha123)
+- **App Principal**: [https://assistente-replit.mkcode-pro.repl.co](https://assistente-replit.mkcode-pro.repl.co)
+- **Calculadoras**: [/calculators](https://assistente-replit.mkcode-pro.repl.co/calculators)  
+- **Admin Panel**: [/admin](https://assistente-replit.mkcode-pro.repl.co/admin) (admin/senha123)
 
 ## 🛠️ Tecnologias Utilizadas
 
@@ -59,8 +59,8 @@ Plataforma web moderna que combina inteligência artificial avançada com design
 ### 1. Clone e instale dependências
 
 ```bash
-git clone https://github.com/seu-usuario/imperio-pharma.git
-cd imperio-pharma
+git clone https://github.com/mkcode-pro/assistente-replit.git
+cd assistente-replit
 npm install
 ```
 
