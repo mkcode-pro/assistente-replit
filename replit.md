@@ -114,7 +114,7 @@ The application follows a modern full-stack architecture with the following key 
 - **Complete Admin Panel**: Full administrative dashboard with login (admin/senha123)
   - Real-time analytics and user statistics
   - User management and conversation monitoring
-  - System settings configuration
+  - System settings configuration with dynamic updates
   - API usage tracking and cost analysis
 - **Scientific Calculators**: Professional-grade calculation tools
   - TMB (Taxa Metabólica Basal) Calculator with activity levels
@@ -125,12 +125,22 @@ The application follows a modern full-stack architecture with the following key 
   - Admin accounts and system settings
   - API usage analytics and calculation history
 - **Enhanced Navigation**: Seamless routing between main app, calculators, and admin panel
+- **Dynamic Configuration System**: All system configurations now managed through admin panel
+  - AI system prompts editable without code changes
+  - Rate limiting parameters configurable
+  - Temperature and model selection
+  - Application name and messages customizable
 
 ### Admin Panel Features
 - **Dashboard**: Comprehensive system overview with real-time metrics
 - **User Management**: View all registered users and their profiles
 - **Conversation Logs**: Monitor all AI interactions and messages
-- **System Configuration**: Manage AI prompts and system settings
+- **System Configuration**: Complete control over all system settings
+  - AI System Prompt: Full control over AI behavior and responses
+  - AI Temperature: Fine-tune response creativity (0.0-1.0)
+  - AI Model: Select which Gemini model to use
+  - Rate Limiting: Configure request limits and time windows
+  - Application Settings: Name, subtitle, and welcome messages
 - **Analytics**: Track API usage, costs, and user behavior patterns
 
 ### Calculator Features

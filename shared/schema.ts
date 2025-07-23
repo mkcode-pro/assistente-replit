@@ -35,6 +35,7 @@ export const systemSettings = pgTable("system_settings", {
   key: text("key").notNull().unique(),
   value: text("value").notNull(),
   description: text("description"),
+  category: text("category").default("general"),
   updatedAt: timestamp("updated_at").defaultNow().notNull(),
 });
 
@@ -75,6 +76,8 @@ export const insertAdminSchema = createInsertSchema(admins).omit({
 export const insertSystemSettingSchema = createInsertSchema(systemSettings).omit({
   id: true,
   updatedAt: true,
+}).extend({
+  category: z.string().optional()
 });
 
 export const insertApiUsageSchema = createInsertSchema(apiUsage).omit({

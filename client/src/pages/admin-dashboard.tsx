@@ -66,7 +66,7 @@ export default function AdminDashboard() {
 
   // Update setting mutation
   const updateSettingMutation = useMutation({
-    mutationFn: async (data: { key: string; value: string; description?: string }) => {
+    mutationFn: async (data: { key: string; value: string; description?: string; category?: string }) => {
       const response = await apiRequest("POST", "/api/admin/settings", data);
       return response.json();
     },
@@ -255,35 +255,90 @@ export default function AdminDashboard() {
     </div>
   );
 
-  const renderSettings = () => (
-    <div className="space-y-4 md:space-y-6">
-      <div className="glass-effect rounded-xl p-4 md:p-6">
-        <h3 className="text-base md:text-lg font-bold mb-4">Configurações do Sistema</h3>
-        <div className="space-y-4">
-          {settings.map((setting: any) => (
-            <div key={setting.id} className="border-b border-gray-600 pb-4">
-              <label className="block text-xs md:text-sm font-semibold mb-2 text-blue-400">
-                {setting.key}
-              </label>
-              <p className="text-xs text-gray-400 mb-2">{setting.description}</p>
-              <textarea
-                value={setting.value}
-                onChange={(e) => {
-                  updateSettingMutation.mutate({
-                    key: setting.key,
-                    value: e.target.value,
-                    description: setting.description
-                  });
-                }}
-                className="w-full bg-gray-800/50 border border-gray-600 rounded-lg px-3 py-2 text-white text-xs md:text-sm resize-none"
-                rows={setting.key === 'system_prompt' ? (isMobile ? 4 : 6) : 2}
-              />
+  const renderSettings = () => {
+    // Group settings by category
+    const groupedSettings = settings.reduce((acc: any, setting: any) => {
+      const category = setting.category || 'general';
+      if (!acc[category]) acc[category] = [];
+      acc[category].push(setting);
+      return acc;
+    }, {});
+
+    const categoryLabels: { [key: string]: string } = {
+      ai: 'Configurações de IA',
+      security: 'Segurança',
+      general: 'Configurações Gerais'
+    };
+
+    return (
+      <div className="space-y-4 md:space-y-6">
+        {Object.entries(groupedSettings).map(([category, categorySettings]: [string, any]) => (
+          <div key={category} className="glass-effect rounded-xl p-4 md:p-6">
+            <h3 className="text-base md:text-lg font-bold mb-4 text-green-400">
+              <i className={`fas fa-${category === 'ai' ? 'brain' : category === 'security' ? 'shield-alt' : 'cogs'} mr-2`}></i>
+              {categoryLabels[category] || category}
+            </h3>
+            <div className="space-y-4">
+              {categorySettings.map((setting: any) => (
+                <div key={setting.id} className="border-b border-gray-600 pb-4">
+                  <label className="block text-xs md:text-sm font-semibold mb-2 text-blue-400">
+                    {setting.key.replace(/_/g, ' ').toUpperCase()}
+                  </label>
+                  <p className="text-xs text-gray-400 mb-2">{setting.description}</p>
+                  {setting.key === 'ai_system_prompt' ? (
+                    <textarea
+                      value={setting.value}
+                      onChange={(e) => {
+                        updateSettingMutation.mutate({
+                          key: setting.key,
+                          value: e.target.value,
+                          description: setting.description,
+                          category: setting.category
+                        });
+                      }}
+                      className="w-full bg-gray-800/50 border border-gray-600 rounded-lg px-3 py-2 text-white text-xs md:text-sm resize-none font-mono"
+                      rows={isMobile ? 6 : 10}
+                    />
+                  ) : setting.key.includes('rate_limit') || setting.key === 'ai_temperature' ? (
+                    <input
+                      type="number"
+                      value={setting.value}
+                      onChange={(e) => {
+                        updateSettingMutation.mutate({
+                          key: setting.key,
+                          value: e.target.value,
+                          description: setting.description,
+                          category: setting.category
+                        });
+                      }}
+                      className="w-full bg-gray-800/50 border border-gray-600 rounded-lg px-3 py-2 text-white text-xs md:text-sm"
+                      step={setting.key === 'ai_temperature' ? '0.1' : '1'}
+                      min={setting.key === 'ai_temperature' ? '0' : '1'}
+                      max={setting.key === 'ai_temperature' ? '1' : undefined}
+                    />
+                  ) : (
+                    <textarea
+                      value={setting.value}
+                      onChange={(e) => {
+                        updateSettingMutation.mutate({
+                          key: setting.key,
+                          value: e.target.value,
+                          description: setting.description,
+                          category: setting.category
+                        });
+                      }}
+                      className="w-full bg-gray-800/50 border border-gray-600 rounded-lg px-3 py-2 text-white text-xs md:text-sm resize-none"
+                      rows={2}
+                    />
+                  )}
+                </div>
+              ))}
             </div>
-          ))}
-        </div>
+          </div>
+        ))}
       </div>
-    </div>
-  );
+    );
+  };
 
   return (
     <div className="min-h-screen pharma-gradient text-white">

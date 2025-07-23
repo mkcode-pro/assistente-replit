@@ -6,7 +6,8 @@ import { generateAIResponse, generateInitialAnalysis } from "./services/gemini";
 import rateLimit from "express-rate-limit";
 import { registerAdminRoutes } from "./admin-routes";
 
-const chatRateLimit = rateLimit({
+// Rate limit will be configured dynamically
+let chatRateLimit = rateLimit({
   windowMs: 60 * 1000, // 1 minute
   max: 10, // 10 requests per minute
   message: { error: "Muitas solicitações. Tente novamente em 1 minuto." },
@@ -17,6 +18,19 @@ const chatRateLimit = rateLimit({
 export async function registerRoutes(app: Express): Promise<Server> {
   // Register admin routes
   registerAdminRoutes(app);
+  
+  // Update rate limit based on configuration
+  const { ConfigManager } = await import("./services/config-manager");
+  const rateLimitMinutes = parseInt(await ConfigManager.get("rate_limit_minutes", "1"));
+  const rateLimitRequests = parseInt(await ConfigManager.get("rate_limit_requests", "10"));
+  
+  chatRateLimit = rateLimit({
+    windowMs: rateLimitMinutes * 60 * 1000,
+    max: rateLimitRequests,
+    message: { error: `Muitas solicitações. Tente novamente em ${rateLimitMinutes} minuto(s).` },
+    standardHeaders: true,
+    legacyHeaders: false,
+  });
   
   // Create user profile
   app.post("/api/profile", async (req, res) => {

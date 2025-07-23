@@ -159,12 +159,20 @@ export class DatabaseStorage implements IStorage {
     if (existing) {
       const [setting] = await db
         .update(systemSettings)
-        .set({ value: insertSetting.value, description: insertSetting.description, updatedAt: new Date() })
+        .set({ 
+          value: insertSetting.value, 
+          description: insertSetting.description,
+          category: insertSetting.category || 'general',
+          updatedAt: new Date() 
+        })
         .where(eq(systemSettings.key, insertSetting.key))
         .returning();
       return setting;
     } else {
-      const [setting] = await db.insert(systemSettings).values(insertSetting).returning();
+      const [setting] = await db.insert(systemSettings).values({
+        ...insertSetting,
+        category: insertSetting.category || 'general'
+      }).returning();
       return setting;
     }
   }
