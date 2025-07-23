@@ -1,10 +1,31 @@
 import express, { type Request, Response, NextFunction } from "express";
 import { registerRoutes } from "./routes";
 import { setupVite, serveStatic, log } from "./vite";
+import session from "express-session";
+import { storage } from "./storage";
 
 const app = express();
+
+// Configure trust proxy for rate limiting
+app.set('trust proxy', 1);
+
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+
+// Configure sessions
+const sessionSettings: session.SessionOptions = {
+  secret: process.env.SESSION_SECRET || 'default-secret-change-in-production',
+  resave: false,
+  saveUninitialized: false,
+  store: storage.sessionStore,
+  cookie: {
+    secure: false, // Set to true in production with HTTPS
+    httpOnly: true,
+    maxAge: 24 * 60 * 60 * 1000 // 24 hours
+  }
+};
+
+app.use(session(sessionSettings));
 
 app.use((req, res, next) => {
   const start = Date.now();

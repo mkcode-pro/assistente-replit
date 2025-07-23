@@ -5,6 +5,13 @@ import { scrypt, randomBytes, timingSafeEqual } from "crypto";
 import { promisify } from "util";
 import rateLimit from "express-rate-limit";
 
+declare module 'express-session' {
+  interface SessionData {
+    adminId?: number;
+    adminUsername?: string;
+  }
+}
+
 const scryptAsync = promisify(scrypt);
 
 async function hashPassword(password: string) {
@@ -65,16 +72,36 @@ export function registerAdminRoutes(app: Express) {
     try {
       const { username, password } = req.body;
       
+      if (!username || !password) {
+        return res.status(400).json({ error: "Usuário e senha são obrigatórios" });
+      }
+      
+      console.log(`Tentativa de login do admin: ${username}`);
+      
       const admin = await storage.getAdmin(username);
-      if (!admin || !(await comparePasswords(password, admin.password))) {
+      if (!admin) {
+        console.log(`Admin não encontrado: ${username}`);
+        return res.status(401).json({ error: "Credenciais inválidas" });
+      }
+
+      const passwordValid = await comparePasswords(password, admin.password);
+      if (!passwordValid) {
+        console.log(`Senha inválida para admin: ${username}`);
         return res.status(401).json({ error: "Credenciais inválidas" });
       }
 
       await storage.updateAdminLastLogin(username);
       
+      // Initialize session if it doesn't exist
+      if (!req.session) {
+        return res.status(500).json({ error: "Erro de sessão. Tente novamente." });
+      }
+      
       // Store admin session
-      (req.session as any).adminId = admin.id;
-      (req.session as any).adminUsername = admin.username;
+      req.session.adminId = admin.id;
+      req.session.adminUsername = admin.username;
+      
+      console.log(`Login do admin bem-sucedido: ${username}`);
       
       res.json({ 
         id: admin.id, 
@@ -82,20 +109,23 @@ export function registerAdminRoutes(app: Express) {
         lastLogin: admin.lastLogin 
       });
     } catch (error: any) {
+      console.error("Erro no login do admin:", error);
       res.status(500).json({ error: error.message });
     }
   });
 
   // Admin logout
   app.post("/api/admin/logout", (req, res) => {
-    delete (req.session as any).adminId;
-    delete (req.session as any).adminUsername;
+    if (req.session) {
+      req.session.adminId = undefined;
+      req.session.adminUsername = undefined;
+    }
     res.json({ success: true });
   });
 
   // Middleware to check admin authentication
   const requireAdmin = (req: any, res: any, next: any) => {
-    if (!(req.session as any).adminId) {
+    if (!req.session || !req.session.adminId) {
       return res.status(401).json({ error: "Acesso negado" });
     }
     next();
